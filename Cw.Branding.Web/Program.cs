@@ -92,7 +92,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     }
 });
 
-
 // 4. Auth (Cập nhật đường dẫn Login động theo lang)
 builder.Services.AddAuthentication("AdminCookie")
     .AddCookie("AdminCookie", options =>
