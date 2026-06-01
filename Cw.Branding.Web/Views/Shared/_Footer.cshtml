@@ -7,6 +7,7 @@
 <footer class="bg-[#002B57] text-white pt-32 pb-8 mt-auto border-t border-white/10 overflow-hidden w-full relative z-0">
     <div class="w-[92%] max-w-[1600px] mx-auto px-4 md:px-6">
 
+        @* --- TOP LINKS GRID --- *@
         <div class="grid grid-cols-1 md:grid-cols-5 gap-y-10 gap-x-6 mb-20 items-start w-full">
 
             @* --- 1. LOGO & COMPANY INFO --- *@
@@ -66,6 +67,71 @@
                     <li><a href="#" class="hover:text-blue-300 transition-colors">@(isEn ? "Privacy Policy" : "Chính sách bảo mật")</a></li>
                     <li><a href="#" class="hover:text-blue-300 transition-colors">@(isEn ? "Terms of Use" : "Điều khoản sử dụng")</a></li>
                 </ul>
+            </div>
+        </div>
+
+        @* --- 6. COMPANY CONTACT ADDRESSES SECTION --- *@
+        <div class="border-t border-white/10 pt-12 mb-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+                @* --- HEAD OFFICE --- *@
+                <div>
+                    <h5 class="font-heading font-bold text-sm text-white uppercase tracking-wider mb-3">
+                        @(isEn ? "Head Office" : "Trụ sở chính")
+                    </h5>
+                    <p class="text-sm font-semibold text-white/90 mb-1">
+                        @(isEn ? "Ho Chi Minh City" : "Hồ Chí Minh")
+                    </p>
+                    <p class="text-sm text-white/70 font-light leading-relaxed mb-3">
+                        14 / 7A Thanh Nhan Trung, P. Tân Bình, Hồ Chí Minh
+                    </p>
+                    <div class="text-sm text-white/70 font-light space-y-1">
+                        <p><span class="font-medium text-white/90">Hotline:</span> (+84-8) 3849.8888</p>
+                        <p>
+                            <span class="font-medium text-white/90">@(isEn ? "Tel:" : "SĐT:")</span>
+                            @(isEn ? "093 3460 320 (Ms. Huyen) / 0974 900 839 (Mr. Phuc)" : "093 3460 320 (Ms. Huyền) / 0974 900 839 (Mr. Phúc)")
+                        </p>
+                    </div>
+                </div>
+
+                @* --- HANOI BRANCH --- *@
+                <div>
+                    <h5 class="font-heading font-bold text-sm text-white uppercase tracking-wider mb-3">
+                        @(isEn ? "Hanoi Office" : "Văn phòng - Chi nhánh")
+                    </h5>
+                    <p class="text-sm font-semibold text-white/90 mb-1">
+                        @(isEn ? "Hanoi" : "Hà Nội")
+                    </p>
+                    <p class="text-sm text-white/70 font-light leading-relaxed mb-3">
+                        Lô số 39 khu BT2, khu nhà ở Trung Văn, Phường Đại Mỗ , Hà Nội
+                    </p>
+                    <div class="text-sm text-white/70 font-light space-y-1">
+                        <p>
+                            <span class="font-medium text-white/90">@(isEn ? "Tel:" : "SĐT:")</span>
+                            @(isEn ? "(+84) 344 956 890 (Ms. Thuy) / (+84) 398 846 833 (Mr. Long)" : "(+84) 344 956 890 (Ms. Thủy) / (+84) 398 846 833 (Mr. Long)")
+                        </p>
+                    </div>
+                </div>
+
+                @* --- DA NANG BRANCH --- *@
+                <div>
+                    <h5 class="font-heading font-bold text-sm text-white uppercase tracking-wider mb-3">
+                        @(isEn ? "Da Nang Office" : "Văn phòng - Chi nhánh")
+                    </h5>
+                    <p class="text-sm font-semibold text-white/90 mb-1">
+                        @(isEn ? "Da Nang" : "Đà Nẵng")
+                    </p>
+                    <p class="text-sm text-white/70 font-light leading-relaxed mb-3">
+                        28, Lot B2-7, Halla Jade Residence, Phường Hòa Cường, Đà Nẵng
+                    </p>
+                    <div class="text-sm text-white/70 font-light space-y-1">
+                        <p>
+                            <span class="font-medium text-white/90">@(isEn ? "Tel:" : "SĐT:")</span>
+                            (+84) 903 649 838
+                        </p>
+                    </div>
+                </div>
+
             </div>
         </div>
 

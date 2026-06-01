@@ -1,13 +1,13 @@
 ﻿@using Microsoft.AspNetCore.Http
 @using System.Globalization
+@using Microsoft.AspNetCore.Routing
 @{
     var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
     var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
 
-    // Lấy ngôn ngữ hiện tại chuẩn từ CultureInfo
     var currentLang = CultureInfo.CurrentCulture.TwoLetterISOLanguageName;
     var isEn = currentLang == "en";
-    // Biến này chỉ dùng để ẩn/hiện Spacer (Khoảng trống) ở trang chủ
+
     bool isHomePage = string.Equals(currentController, "Home", StringComparison.OrdinalIgnoreCase)
                    && string.Equals(currentAction, "Index", StringComparison.OrdinalIgnoreCase);
 
@@ -16,11 +16,9 @@
         var routeValues = ViewContext.RouteData.Values;
         var newRouteValues = new RouteValueDictionary(routeValues);
         newRouteValues["lang"] = targetLang;
-
-        // Không cộng thêm Context.Request.QueryString để tránh lặp ?lang=en
         return Url.Action(currentAction, currentController, newRouteValues);
     }
-    // Helper: Active State cho Menu
+
     string IsActive(string controller, string action = null)
     {
         if (string.Equals(currentController, controller, StringComparison.OrdinalIgnoreCase))
@@ -34,21 +32,41 @@
     }
 }
 
-<header class="fixed top-0 left-0 right-0 z-50 bg-transparent backdrop-blur-[2px] transition-all duration-300">
+<header class="fixed top-0 left-0 right-0 z-50 bg-white/90 md:bg-transparent backdrop-blur-[4px] border-b border-slate-200/10 transition-all duration-300">
 
-    <div class="w-[92%] max-w-[1600px] h-32 mx-auto flex items-center justify-between px-4 md:px-6">
+    @* --- TOP UTILITY BAR (CẬP NHẬT HOTLINE MỚI) --- *@
+    <div class="hidden md:block bg-[#002B57] py-2 text-[11px] xl:text-xs text-white/80 font-medium border-b border-white/10 shadow-sm">
+        <div class="w-[92%] max-w-[1600px] mx-auto px-4 md:px-6 flex justify-end space-x-6 items-center">
+            @* Khối văn phòng chính *@
+            <div class="flex items-center space-x-1.5 border-r border-white/20 pr-5">
+                <span class="text-white/50 font-light">Văn phòng:</span>
+                <a href="tel:02838498888" class="text-white hover:text-amber-400 transition-colors font-semibold tracking-wide">0283 849 8888</a>
+                <span class="text-white/40 text-[10px] font-normal">(Ext: 25/30)</span>
+                <span class="text-white/30">/</span>
+                <a href="tel:0933460320" class="text-white hover:text-amber-400 transition-colors font-semibold tracking-wide">093 3460 320</a>
+                <span class="text-white/50 font-light text-[11px]">(Ms. Huyền)</span>
+            </div>
+            @* Khối Hà Nội *@
+            <div class="flex items-center space-x-1.5">
+                <span class="text-white/50 font-light">HN (Ms. Thủy):</span>
+                <a href="tel:0344956890" class="text-white hover:text-amber-400 transition-colors font-semibold tracking-wide">0344 956 890</a>
+            </div>
+            @* Khối HCM *@
+            <div class="flex items-center space-x-1.5">
+                <span class="text-white/50 font-light">HCM (Mr. Phúc):</span>
+                <a href="tel:0974900839" class="text-white hover:text-amber-400 transition-colors font-semibold tracking-wide">0974 900 839</a>
+            </div>
+        </div>
+    </div>
 
-        <a asp-controller="Home" asp-action="Index" asp-route-lang="en" class="flex-shrink-0">
-            <img src="~/images/logo2.png" alt="Charles Wembley" class="h-[126px] w-auto object-contain brightness-0" />
+    @* Main Navbar Container *@
+    <div class="w-[92%] max-w-[1600px] h-24 mx-auto flex items-center justify-between px-4 md:px-6">
+
+        <a asp-controller="Home" asp-action="Index" asp-route-lang="@currentLang" class="flex-shrink-0">
+            <img src="~/images/logo2.png" alt="Charles Wembley" class="h-[95px] w-auto object-contain brightness-0" />
         </a>
 
-        @* UPDATE: 
-           1. space-x-12 -> space-x-16 (Tăng khoảng cách menu) 
-        *@
-        <nav class="hidden lg:flex items-center space-x-16">
-            @* UPDATE: 
-               2. text-lg -> text-base (Giảm cỡ chữ xuống mức tiêu chuẩn) 
-            *@
+        <nav class="hidden lg:flex items-center space-x-12 xl:space-x-16">
             <a asp-controller="Home" asp-action="Index" asp-route-lang="@currentLang" class="text-base font-heading font-bold transition-colors uppercase tracking-wide @IsActive("Home")">
                 @(isEn ? "Home" : "Trang chủ")
             </a>
@@ -69,18 +87,19 @@
             </a>
         </nav>
 
-        <div class="flex items-center space-x-6">
-            @* Cập nhật cỡ chữ cho phần switch ngôn ngữ luôn cho cân đối *@
-            <div class="flex items-center border-l border-gray-300 ml-4 pl-4 space-x-3 text-xs font-bold">
+        <div class="flex items-center space-x-4 xl:space-x-6">
+            @* Switch ngôn ngữ *@
+            <div class="flex items-center border-l border-gray-300 pl-4 space-x-2 text-xs font-bold">
                 <a href="@GetSwitchLangUrl("en")" class="@(isEn ? "text-brand-primary" : "text-gray-400 hover:text-black") transition-colors">EN</a>
                 <span class="text-gray-300">|</span>
                 <a href="@GetSwitchLangUrl("vi")" class="@(!isEn ? "text-brand-primary" : "text-gray-400 hover:text-black") transition-colors">VN</a>
             </div>
+
             @* Search Bar trong Header *@
             <div class="relative hidden xl:block">
                 <form action="/@ViewContext.RouteData.Values["lang"]/medical-solutions" method="GET" class="relative">
                     <input type="text" name="searchTerm" placeholder="Search products..."
-                           class="w-48 rounded-full border border-slate-300 bg-white/50 py-1.5 pl-4 pr-10 text-sm focus:border-brand-primary focus:outline-none focus:ring-1 focus:ring-brand-primary transition-all" />
+                           class="w-40 xl:w-48 rounded-full border border-slate-300 bg-white/50 py-1.5 pl-4 pr-10 text-sm focus:border-brand-primary focus:outline-none focus:ring-1 focus:ring-brand-primary transition-all" />
                     <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-brand-primary">
                         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
@@ -88,6 +107,7 @@
                     </button>
                 </form>
             </div>
+
             <button type="button" id="mobile-menu-btn" class="lg:hidden p-2 text-black hover:text-brand-primary focus:outline-none">
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
@@ -97,7 +117,7 @@
     </div>
 
     @* Mobile Menu *@
-    <div id="mobile-menu" class="hidden lg:hidden absolute top-32 left-0 w-full bg-white border-b border-gray-200 shadow-lg">
+    <div id="mobile-menu" class="hidden lg:hidden absolute top-24 left-0 w-full bg-white border-b border-gray-200 shadow-lg z-50">
         <div class="px-6 py-4 space-y-4">
             <a asp-controller="Home" asp-action="Index" asp-route-lang="@currentLang" class="block text-base font-heading font-bold uppercase @IsActive("Home")">Home</a>
             <a asp-controller="About" asp-action="Index" asp-route-lang="@currentLang" class="block text-base font-heading font-bold uppercase @IsActive("About")">About Us</a>
@@ -105,6 +125,31 @@
             <a asp-controller="FbSolutions" asp-action="Index" asp-route-lang="@currentLang" class="block text-base font-heading font-bold uppercase @IsActive("FbSolutions")">F&B</a>
             <a asp-controller="News" asp-action="Index" asp-route-lang="@currentLang" class="block text-base font-heading font-bold uppercase @IsActive("News")">News</a>
             <a asp-controller="Contact" asp-action="Index" asp-route-lang="@currentLang" class="block text-base font-heading font-bold uppercase @IsActive("Contact")">Contact</a>
+
+            @* --- Mobile Hotline Section (Tối ưu chống tràn chữ) --- *@
+            <div class="pt-5 border-t border-gray-100 space-y-2 text-[11px] font-semibold text-slate-600">
+                @* Khối văn phòng chiếm trọn hàng ngang trên mobile *@
+                <div class="bg-slate-50 p-2.5 rounded flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
+                    <span class="text-slate-400 text-[10px] font-normal uppercase">Văn phòng (Ms. Huyền)</span>
+                    <div class="flex flex-wrap gap-x-2 gap-y-1 text-black">
+                        <a href="tel:02838498888" class="hover:text-brand-primary">0283 849 8888</a>
+                        <span class="text-slate-300">(Ext: 25/30)</span>
+                        <span class="text-slate-300">/</span>
+                        <a href="tel:0933460320" class="hover:text-brand-primary">093 3460 320</a>
+                    </div>
+                </div>
+                @* Khối HN và HCM chia đôi layout để cân đối *@
+                <div class="grid grid-cols-2 gap-2 text-center text-[10px]">
+                    <div class="bg-slate-50 py-2 rounded">
+                        <span class="text-slate-400 block text-[9px] font-normal uppercase">HN (Ms. Thủy)</span>
+                        <a href="tel:0344956890" class="hover:text-brand-primary text-black tracking-wide">0344 956 890</a>
+                    </div>
+                    <div class="bg-slate-50 py-2 rounded">
+                        <span class="text-slate-400 block text-[9px] font-normal uppercase">HCM (Mr. Phúc)</span>
+                        <a href="tel:0974900839" class="hover:text-brand-primary text-black tracking-wide">0974 900 839</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </header>
