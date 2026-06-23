@@ -76,7 +76,6 @@ namespace Cw.Branding.Web.Services
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
-                // Bước 1: Xử lý tạo mới Brand/MachineType trước để lấy ID
                 foreach (var row in validRows)
                 {
                     if (row.IsNewBrand && !string.IsNullOrEmpty(row.BrandName))
@@ -99,8 +98,7 @@ namespace Cw.Branding.Web.Services
                             newMt = new MachineType
                             {
                                 NameVi = row.MachineTypeName,
-                                NameEn = row.MachineTypeName,
-                                // Đã sửa row.NameVi và row.NameEn thành row.MachineTypeName để tránh lỗi (trừ khi model của bạn thực sự có row.NameVi)
+                                NameEn = row.MachineTypeName,                              
                                 SlugVi = SlugHelper.GenerateSlug(row.MachineTypeName), // SEO cho Việt
                                 SlugEn = SlugHelper.GenerateSlug(row.MachineTypeName), // SEO cho Anh
                                 IsActive = true
@@ -112,26 +110,21 @@ namespace Cw.Branding.Web.Services
                     }
                 }
 
-                // ==========================================
-                // BƯỚC 2: NHẬP SẢN PHẨM (UPSERT - CẬP NHẬT HOẶC THÊM MỚI)
-                // ==========================================
-
-                // 2.1: Lọc bỏ các dòng trùng lặp (Duplicate) NGAY BÊN TRONG file Excel
-                // Nếu file Excel có 2 dòng cùng Code, ta chỉ lấy dòng cuối cùng để xử lý
+                
                 var uniqueRows = validRows
                     .GroupBy(r => r.Code.ToLower())
                     .Select(g => g.Last()) // Lấy dòng cấu hình mới nhất nếu trùng
                     .ToList();
 
-                // 2.2: Lấy danh sách tất cả mã Code từ file
+              
                 var incomingCodes = uniqueRows.Select(r => r.Code.ToLower()).ToList();
 
-                // 2.3: Truy vấn DUY NHẤT 1 LẦN để kéo tất cả sản phẩm đang có trong DB lên Memory
+                
                 var existingProducts = await _context.Products
                     .Where(p => incomingCodes.Contains(p.Code.ToLower()))
-                    .ToDictionaryAsync(p => p.Code.ToLower(), p => p); // Lưu thành Dictionary để tìm siêu tốc (O(1))
+                    .ToDictionaryAsync(p => p.Code.ToLower(), p => p); 
 
-                // 2.4: Phân loại dữ liệu vào 2 rổ (Insert và Update)
+               
                 var productsToInsert = new List<Product>();
                 var productsToUpdate = new List<Product>();
 
@@ -141,21 +134,21 @@ namespace Cw.Branding.Web.Services
 
                     if (existingProducts.TryGetValue(codeKey, out var existingProduct))
                     {
-                        // TH1: Đã tồn tại trong DB -> Cập nhật thông tin
+                       
                         MapData(row, existingProduct);
                         existingProduct.UpdatedAt = DateTime.UtcNow;
                         productsToUpdate.Add(existingProduct);
                     }
                     else
                     {
-                        // TH2: Chưa có trong DB -> Thêm mới
+                      
                         var newProduct = new Product { CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, IsActive = true };
                         MapData(row, newProduct);
                         productsToInsert.Add(newProduct);
                     }
                 }
 
-                // 2.5: Thực thi Bulk Operations với Entity Framework
+              
                 if (productsToInsert.Any())
                 {
                     _context.Products.AddRange(productsToInsert); // Insert hàng loạt
@@ -166,7 +159,7 @@ namespace Cw.Branding.Web.Services
                     _context.Products.UpdateRange(productsToUpdate); // Update hàng loạt
                 }
 
-                // 2.6: Lưu tất cả thay đổi xuống DB trong 1 Transaction duy nhất
+                
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
 
@@ -177,8 +170,6 @@ namespace Cw.Branding.Web.Services
             {
                 // Phải có catch để Rollback nếu có lỗi xảy ra giữa chừng
                 await transaction.RollbackAsync();
-
-                // Bạn có thể cân nhắc thêm _logger.LogError(ex, "Lỗi Import") ở đây
                 return (false, $"Lỗi trong quá trình import: {ex.Message}");
             }
         }

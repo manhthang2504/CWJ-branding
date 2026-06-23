@@ -39,26 +39,31 @@
         <div class="w-[92%] max-w-[1600px] mx-auto px-4 md:px-6 flex justify-end space-x-6 items-center">
             @* Khối văn phòng chính *@
             <div class="flex items-center space-x-1.5 border-r border-white/20 pr-5">
-                <span class="text-white/50 font-light">Văn phòng:</span>
+                <span class="text-white/50 font-light">@(isEn ? "Office:" : "Văn phòng:")</span>
                 <a href="tel:02838498888" class="text-white hover:text-amber-400 transition-colors font-semibold tracking-wide">0283 849 8888</a>
                 <span class="text-white/40 text-[10px] font-normal">(Ext: 25/30)</span>
                 <span class="text-white/30">/</span>
                 <a href="tel:0933460320" class="text-white hover:text-amber-400 transition-colors font-semibold tracking-wide">093 3460 320</a>
                 <span class="text-white/50 font-light text-[11px]">(Ms. Huyền)</span>
             </div>
-            @* Khối Hà Nội *@
+
+            @* Khối Hà Nội (Đã cập nhật theo yêu cầu) *@
             <div class="flex items-center space-x-1.5">
-                <span class="text-white/50 font-light">HN (Ms. Thủy):</span>
+                <span class="text-white/50 font-light">
+                    @(isEn ? "Sales Hanoi" : "Sales Hà Nội") (@(isEn ? "Ms. Thuy" : "Ms. Thủy")):
+                </span>
                 <a href="tel:0344956890" class="text-white hover:text-amber-400 transition-colors font-semibold tracking-wide">0344 956 890</a>
             </div>
-            @* Khối HCM *@
+
+            @* Khối HCM (Đã cập nhật theo yêu cầu) *@
             <div class="flex items-center space-x-1.5">
-                <span class="text-white/50 font-light">HCM (Mr. Phúc):</span>
+                <span class="text-white/50 font-light">
+                    @(isEn ? "Sales HCM" : "Sales TP.HCM") (Mr. Phuc):
+                </span>
                 <a href="tel:0974900839" class="text-white hover:text-amber-400 transition-colors font-semibold tracking-wide">0974 900 839</a>
             </div>
         </div>
     </div>
-
     @* Main Navbar Container *@
     <div class="w-[92%] max-w-[1600px] h-24 mx-auto flex items-center justify-between px-4 md:px-6">
 

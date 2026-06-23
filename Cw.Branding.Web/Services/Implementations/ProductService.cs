@@ -144,7 +144,7 @@ public class ProductService : IProductService
         _context.Products.Update(product);
         return await _context.SaveChangesAsync() > 0; // Trả về true nếu có ít nhất 1 dòng bị thay đổi
     }
-    // CẬP NHẬT: Hàm Update Cũ (Giữ lại nếu anh có xài chỗ khác không liên quan đến ảnh)
+    // CẬP NHẬT: Hàm Update Cũ 
     public async Task<bool> UpdateAsync(Product product)
     {
         try
@@ -250,7 +250,7 @@ public class ProductService : IProductService
             return false;
         }
     }
-    // CẬP NHẬT: Xử lý Edit Product (Task 2.2.2)
+    // CẬP NHẬT: Xử lý Edit Product 
     public async Task<bool> UpdateProductWithImagesAsync(Product product, List<IFormFile> newImages, List<int> deletedImageIds, int? mainImageId = null, string? mainImageName = null)
     {
         try
@@ -366,19 +366,16 @@ public class ProductService : IProductService
     {
         try
         {
-            // 1. Tìm sản phẩm
             var product = await _context.Products.FindAsync(id);
             if (product == null) return false;
 
-            // 2. LOGIC FOLDER PURGE: Xóa toàn bộ thư mục /uploads/products/{id}/
+          
             var productFolder = Path.Combine(_env.WebRootPath, "uploads", "products", id.ToString());
             if (Directory.Exists(productFolder))
             {
-                // Tham số 'true' ở đây là để xóa đệ quy (xóa luôn cả các file bên trong folder)
+          
                 Directory.Delete(productFolder, true);
             }
-
-            // 3. XÓA DATABASE (EF Core sẽ tự động Cascade Delete các record trong bảng ProductImages)
             _context.Products.Remove(product);
             await _context.SaveChangesAsync();
 
@@ -389,7 +386,7 @@ public class ProductService : IProductService
             return false;
         }
     }
-    // Thêm vào ProductService.cs
+    
     public async Task<List<Product>> GetFilteredProductsClientAsync(string? searchTerm, int? categoryId, int? brandId, int? machineTypeId)
     {
         var query = _context.Products
@@ -416,7 +413,7 @@ public class ProductService : IProductService
         if (machineTypeId.HasValue && machineTypeId > 0)
             query = query.Where(p => p.MachineTypeId == machineTypeId.Value);
 
-        // ĐỒNG BỘ: Sắp xếp giống hệt Admin
+    
         return await query
             .OrderBy(p => p.DisplayOrder)
             .ThenByDescending(p => p.CreatedAt)
@@ -424,7 +421,7 @@ public class ProductService : IProductService
             .ToListAsync();
     }
 
-    // 2. Cập nhật hàm Client CÓ phân trang (Hàm này khả năng cao đang kéo data lên Partial View của ông)
+    
     public async Task<(List<Product> Items, int TotalCount)> GetFilteredProductsPaginatedAsync(
     string? searchTerm, int? categoryId, int? brandId, int? machineTypeId, int page = 1, int pageSize = 8)
     {
@@ -452,7 +449,7 @@ public class ProductService : IProductService
 
         int totalCount = await query.CountAsync();
 
-        // ĐỒNG BỘ: Sửa từ OrderByDescending(p => p.Id) thành cấu trúc giống Admin bên dưới
+      
         var items = await query
             .OrderBy(p => p.DisplayOrder)
             .ThenByDescending(p => p.CreatedAt)

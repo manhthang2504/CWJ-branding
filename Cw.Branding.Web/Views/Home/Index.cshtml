@@ -13,32 +13,37 @@
 <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Monsieur+La+Doulaise&display=swap" rel="stylesheet">
 
-@* --- 1. HERO BANNER SECTION --- *@
+@* --- 1. HERO BANNER SECTION (Giữ nguyên cấu trúc ảnh và overlay trắng) --- *@
 <section class="relative w-full h-screen min-h-[700px] flex items-center overflow-hidden">
     <div class="absolute inset-0 z-0">
-        @* Dùng toán tử ?? để đảm bảo luôn có ảnh *@
-        <img src="@(Model.Hero.BackgroundImage ?? "/images/Heroillstration.jpg")"
-             alt="Hero" class="w-full h-full object-cover" />
-        <div class="absolute inset-0 bg-white/20"></div>
+        <img src="@(Model.Hero.BackgroundImage ?? "/images/Heroillstration.jpg")" alt="Hero" class="w-full h-full object-cover" />
+        <div class="absolute inset-0 bg-white/20"></div> @* Giữ nguyên overlay trắng gốc *@
     </div>
 
     <div class="relative z-10 w-[92%] max-w-[1800px] mx-auto h-full flex flex-col justify-center pt-32 px-4 md:pl-10 md:pr-3" data-aos="fade-right">
         <div class="max-w-5xl text-center md:text-left">
-            <h1 class="font-heading font-bold text-blue-900 text-4xl md:text-5xl lg:text-[60px] leading-tight lg:leading-[70px] mb-2">
+
+           
+            <h1 class="font-heading font-bold text-blue-900 text-4xl md:text-5xl lg:text-[60px] leading-tight lg:leading-[70px] mb-2 drop-shadow-[0_2px_4px_rgba(0,0,0,0.15)]">
                 @(isEn? Model.Hero.TitleEn : Model.Hero.TitleVi)
             </h1>
-            <h1 class="font-heading font-bold text-[#004F9F] uppercase text-4xl md:text-5xl lg:text-[60px] leading-tight lg:leading-[70px]">
+
+          
+            <h1 class="font-heading font-bold text-[#004F9F] uppercase text-4xl md:text-5xl lg:text-[60px] leading-tight lg:leading-[70px] drop-shadow-[0_2px_4px_rgba(0,0,0,0.15)]">
                 @(isEn? Model.Hero.HighlightEn : Model.Hero.HighlightVi)
             </h1>
-            <p class="font-body text-lg md:text-xl text-slate-800 mt-6 mb-10 max-w-2xl leading-relaxed font-medium">
+
+            
+            <p class="font-body text-lg md:text-xl text-slate-800 mt-6 mb-10 max-w-2xl leading-relaxed font-medium drop-shadow-[0_1px_2px_rgba(0,0,0,0.1)]">
                 @(isEn? Model.Hero.DescriptionEn : Model.Hero.DescriptionVi)
             </p>
 
+            @* Phần CTA giữ nguyên *@
             <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start mt-8">
                 <a href="@Model.Hero.Cta1Url" class="btn-primary rounded-md px-8 py-3 text-lg shadow-lg">
                     @(isEn? Model.Hero.Cta1TextEn : Model.Hero.Cta1TextVi)
                 </a>
-                <a href="@Model.Hero.Cta2Url" class="inline-flex items-center justify-center px-8 py-3 rounded-md border-2 border-[#004F9F] text-[#004F9F] font-bold hover:bg-[#004F9F] hover:text-white transition-all">
+                <a href="@Model.Hero.Cta2Url" class="btn-secondary rounded-md px-8 py-3 text-lg shadow-lg">
                     @(isEn? Model.Hero.Cta2TextEn : Model.Hero.Cta2TextVi)
                 </a>
             </div>
